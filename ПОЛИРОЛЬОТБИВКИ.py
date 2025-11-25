@@ -32,10 +32,17 @@ except Exception:
 # ── Импорт конфигурации ──
 try:
     import config
+    # Основные настройки
     BOT_TOKEN = config.BOT_TOKEN
+    ADMIN_CHAT_ID = getattr(config, 'ADMIN_CHAT_ID', None)
+    
+    # VK.ОРД API настройки
     VK_ORD_API_TOKEN = getattr(config, 'VK_ORD_API_TOKEN', None)
     VK_ORD_API_BASE = getattr(config, 'VK_ORD_API_BASE', 'https://api-sandbox.ord.vk.com')
-    ADMIN_CHAT_ID = getattr(config, 'ADMIN_CHAT_ID', None)
+    VK_ORD_PERSON_TYPE_JURIDICAL = getattr(config, 'VK_ORD_PERSON_TYPE_JURIDICAL', 'juridical')
+    VK_ORD_PERSON_TYPE_IP = getattr(config, 'VK_ORD_PERSON_TYPE_IP', 'ip')
+    VK_ORD_PERSON_TYPE_INDIVIDUAL = getattr(config, 'VK_ORD_PERSON_TYPE_INDIVIDUAL', 'physical')
+    VK_ORD_PERSON_TYPE_DEFAULT = getattr(config, 'VK_ORD_PERSON_TYPE_DEFAULT', 'juridical')
     TEMPLATE_INVOICE_SINGLE = getattr(config, 'TEMPLATE_INVOICE_SINGLE', 'templates/schet-oferta.docx')
     TEMPLATE_INVOICE_MULTI = getattr(config, 'TEMPLATE_INVOICE_MULTI', 'templates/schet-oferta2-multi.docx')
     TEMPLATE_INVOICE_MULTI_PRO = getattr(config, 'TEMPLATE_INVOICE_MULTI_PRO', 'templates/schet-oferta2-multiPRO.docx')
@@ -1740,11 +1747,14 @@ from aiogram.fsm.context import FSMContext as _FSMContext_vk
 
 VK_ORD_TOKENS_FILE = "vk_ord_tokens.json"
 VK_ORD_STATE_FILE = "vk_ord_state.json"
-# VK_ORD_API_BASE уже определен в config, но можно переопределить через env
-VK_ORD_API_BASE = _os_vk.getenv("VK_ORD_API_BASE", VK_ORD_API_BASE)  # используется из config
-# VK_ORD_API_TOKEN уже определен в config
+
+# Переопределение через переменные окружения (опционально, приоритет выше config)
+# Это позволяет переопределять настройки без изменения config.py (например, в Docker)
+VK_ORD_API_BASE = _os_vk.getenv("VK_ORD_API_BASE", VK_ORD_API_BASE)
+VK_ORD_API_TOKEN = _os_vk.getenv("VK_ORD_API_TOKEN", VK_ORD_API_TOKEN) if VK_ORD_API_TOKEN else None
+
 if not VK_ORD_API_TOKEN:
-    VK_ORD_API_TOKEN = _os_vk.getenv("VK_ORD_API_TOKEN", 'YOUR_VK_ORD_API_TOKEN_HERE')  # fallback
+    logging.warning("VK_ORD_API_TOKEN не задан! Функционал VK.ОРД может быть ограничен.")
 
 # ---------- ХРАНЕНИЕ ТОКЕНОВ И СОСТОЯНИЯ ----------
 
@@ -2427,27 +2437,28 @@ async def vk_ord_person_confirm_step(message: _Message_vk, state: _FSMContext_vk
     inn_raw = (data.get("vk_ord_person_inn") or "").strip()
     inn_digits = _re_vk.sub(r"\D", "", inn_raw)
 
+    # Используем настройки типов персон из config
     if kind == "juridical":
-        _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_JURIDICAL", "juridical")
+        _person_type = VK_ORD_PERSON_TYPE_JURIDICAL
     elif kind == "ip":
         # ИП — отдельный тип в VK.ОРД (см. пример person/type=ip)
-        _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_IP", "ip")
+        _person_type = VK_ORD_PERSON_TYPE_IP
     elif kind == "physical":
         # Физ. лицо — резервная логика по длине ИНН
         if len(inn_digits) == 10:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_JURIDICAL", "juridical")
+            _person_type = VK_ORD_PERSON_TYPE_JURIDICAL
         elif len(inn_digits) == 12:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_INDIVIDUAL", "physical")
+            _person_type = VK_ORD_PERSON_TYPE_INDIVIDUAL
         else:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_DEFAULT", "juridical")
+            _person_type = VK_ORD_PERSON_TYPE_DEFAULT
     else:
         # На всякий случай используем определение по длине ИНН
         if len(inn_digits) == 10:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_JURIDICAL", "juridical")
+            _person_type = VK_ORD_PERSON_TYPE_JURIDICAL
         elif len(inn_digits) == 12:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_INDIVIDUAL", "physical")
+            _person_type = VK_ORD_PERSON_TYPE_INDIVIDUAL
         else:
-            _person_type = _os_vk.getenv("VK_ORD_PERSON_TYPE_DEFAULT", "juridical")
+            _person_type = VK_ORD_PERSON_TYPE_DEFAULT
 
     if not inn_digits:
         inn_digits = inn_raw

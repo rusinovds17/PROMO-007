@@ -4,9 +4,17 @@
 # Токен Telegram бота
 BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
 
-# VK.ОРД API настройки
+# ==================== VK.ОРД API настройки ====================
+# Базовый URL API VK.ОРД (sandbox или production)
+VK_ORD_API_BASE = "https://api-sandbox.ord.vk.com"  # или "https://api.ord.vk.com" для production
+# Глобальный API токен VK.ОРД (используется если у пользователя нет персонального токена)
 VK_ORD_API_TOKEN = "YOUR_VK_ORD_API_TOKEN_HERE"
-VK_ORD_API_BASE = "https://api-sandbox.ord.vk.com"  # или production URL
+
+# Типы персон для VK.ОРД API
+VK_ORD_PERSON_TYPE_JURIDICAL = "juridical"  # Юридическое лицо
+VK_ORD_PERSON_TYPE_IP = "ip"  # Индивидуальный предприниматель
+VK_ORD_PERSON_TYPE_INDIVIDUAL = "physical"  # Физическое лицо
+VK_ORD_PERSON_TYPE_DEFAULT = "juridical"  # Тип по умолчанию
 
 # ID группы Telegram для отправки метрик (бот должен быть админом)
 ADMIN_CHAT_ID = "1003460901654"
