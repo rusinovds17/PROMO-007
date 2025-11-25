@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  telegram-bot:
+    build: .
+    container_name: promo-pro-bot
+    restart: unless-stopped
+    volumes:
+      # Данные счетчиков и метрик
+      - ./counters.json:/app/counters.json
+      - ./metrics.json:/app/metrics.json
+      # VK.ОРД данные
+      - ./vk_ord_tokens.json:/app/vk_ord_tokens.json
+      - ./vk_ord_state.json:/app/vk_ord_state.json
+      # Секреты и пользовательские данные
+      - ./secrets:/app/secrets
+      # Сгенерированные документы
+      - ./generated:/app/generated
+      # Конфигурация
+      - ./config.py:/app/config.py
+    environment:
+      - TZ=Europe/Moscow
+    env_file:
+      - .env
+
