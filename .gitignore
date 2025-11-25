@@ -60,6 +60,5 @@ vk_ord_tokens.json
 .DS_Store
 Thumbs.db
 
-# Docker
-.dockerignore
+# Docker (не игнорируем .dockerignore, он нужен в репозитории)
 
