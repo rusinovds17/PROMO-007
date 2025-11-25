@@ -1745,8 +1745,8 @@ from logging import getLogger as _getLogger_vk
 from aiogram.types import Message as _Message_vk, ReplyKeyboardMarkup as _ReplyKeyboardMarkup_vk, KeyboardButton as _KeyboardButton_vk
 from aiogram.fsm.context import FSMContext as _FSMContext_vk
 
-VK_ORD_TOKENS_FILE = "vk_ord_tokens.json"
-VK_ORD_STATE_FILE = "vk_ord_state.json"
+VK_ORD_TOKENS_FILE = "secrets/vk_ord_tokens.json"
+VK_ORD_STATE_FILE = "secrets/vk_ord_state.json"
 
 # Переопределение через переменные окружения (опционально, приоритет выше config)
 # Это позволяет переопределять настройки без изменения config.py (например, в Docker)

@@ -7,11 +7,11 @@ services:
     restart: unless-stopped
     volumes:
       # Данные счетчиков и метрик
-      - ./counters.json:/app/counters.json
-      - ./metrics.json:/app/metrics.json
+      - ./secrets/counters.json:/app/secrets/counters.json
+      - ./secrets/metrics.json:/app/secrets/metrics.json
       # VK.ОРД данные
-      - ./vk_ord_tokens.json:/app/vk_ord_tokens.json
-      - ./vk_ord_state.json:/app/vk_ord_state.json
+      - ./secrets/vk_ord_tokens.json:/app/secrets/vk_ord_tokens.json
+      - ./secrets/vk_ord_state.json:/app/secrets/vk_ord_state.json
       # Секреты и пользовательские данные
       - ./secrets:/app/secrets
       # Сгенерированные документы

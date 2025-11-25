@@ -43,20 +43,21 @@ env/
 *.json.bak
 backup/
 
-# Секреты
+# Секреты - вся папка secrets/ (кроме README.md)
+secrets/*
+!secrets/README.md
+# Но явно указываем основные файлы для ясности
 secrets/user_data/
 secrets/vk/
 secrets/*.key
 secrets/*.txt
+secrets/*.json
+secrets/PASSWORD.txt
 *.key
+# Старые файлы в корне (если остались после переноса)
 PASSWORD.txt
-
-# Сгенерированные файлы (опционально, можно раскомментировать если не нужно в git)
-# generated/
-# counters.json
-# metrics.json
-
-# VK.ОРД токены и состояние (чувствительные данные)
+counters.json
+metrics.json
 vk_ord_tokens.json
 vk_ord_state.json
 

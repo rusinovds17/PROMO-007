@@ -28,8 +28,8 @@ TEMPLATE_CONTRACT_MULTI = "templates/dogovor_rim2-multi.docx"
 
 # Прочие настройки
 OUTPUT_DIR = "generated"
-COUNTERS_FILE = "counters.json"
-METRICS_FILE = "metrics.json"
+COUNTERS_FILE = "secrets/counters.json"
+METRICS_FILE = "secrets/metrics.json"
 MAX_ITEMS_FOR_TEMPLATE = 50
 CAPTION_LIMIT = 1024
 
