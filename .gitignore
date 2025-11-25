@@ -45,6 +45,9 @@ backup/
 
 # Секреты
 secrets/user_data/
+secrets/vk/
+secrets/*.key
+secrets/*.txt
 *.key
 PASSWORD.txt
 
@@ -53,8 +56,12 @@ PASSWORD.txt
 # counters.json
 # metrics.json
 
-# VK.ОРД токены (чувствительные данные)
+# VK.ОРД токены и состояние (чувствительные данные)
 vk_ord_tokens.json
+vk_ord_state.json
+
+# Старые файлы с хардкод токенами (не используются, содержат секреты)
+ОРДГОТОВНА99.py
 
 # OS
 .DS_Store
