@@ -18,6 +18,8 @@ services:
       - ./generated:/app/generated
       # Конфигурация
       - ./config.py:/app/config.py
+      # Шаблоны копируются в образ (не монтируем из-за проблем с seek() на Windows)
+      # - ./templates:/app/templates
     environment:
       - TZ=Europe/Moscow
     env_file:
