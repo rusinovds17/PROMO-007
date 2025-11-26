@@ -42,6 +42,7 @@ env/
 *.log
 *.json.bak
 backup/
+generated/
 
 # Секреты - вся папка secrets/ (кроме README.md)
 secrets/*
